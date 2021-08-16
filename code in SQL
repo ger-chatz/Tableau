@@ -1,0 +1,54 @@
+--Queries for covid tableau
+
+ 
+ --1st table
+Select date,SUM(new_cases) as total_cases, SUM(cast(new_deaths as int)) as total_deaths, SUM(cast(new_deaths as int))/SUM(New_Cases)*100 as deathper
+From covidportfolio..covid
+Where location like '%greece%'
+Group By date
+
+
+
+
+--2nd table
+
+
+-- European Union is Europe
+
+Select location, SUM(cast(new_deaths as int)) as Totaldeaths
+From covidportfolio..covid
+--Where location like '%greece%'
+Where continent is null 
+and location not in ('World', 'European Union', 'International')
+Group by location
+order by Totaldeaths desc
+
+
+-- 3rd table
+
+Select Location, Population, MAX(total_cases) as maxinfect,  Max((total_cases/population))*100 as pop.inf.per
+From covidportfolio..covid
+--Where location like '%states%'
+Group by Location, Population
+order by pop.inf.per desc
+
+
+-- 4th table
+
+
+Select max ((people_fully_vaccinated/population))*100as vacperce,date,  max((new_deaths/population))*100 as Percentdeaths,MAX((new_deaths/new_cases))*100as newdc
+From covidportfolio..covid
+Where location like '%greece%'
+Group by  date
+order by date asc
+
+--just to remember some collums
+select*
+from covidportfolio..covid
+
+--5th table
+Select date, max ((total_Deaths/total_cases))*100as deathper, max ((people_fully_vaccinated/population))*100as vacperce
+from covidportfolio..covid
+where location like '%greece%'
+group by date
+order by date asc
